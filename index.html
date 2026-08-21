@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#061e4a">
+  <meta name="description" content="Catálogo inmobiliario consultable por ubicación y etapa jurídica.">
+  <title>Catálogo de Inmuebles</title>
+  <link rel="icon" href="./favicon.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<main>
+  <header class="hero" id="inicio">
+    <nav class="nav shell"><a class="brand" href="#inicio"><span class="brand-mark">⌂</span><span>Catálogo inmobiliario</span></a></nav>
+    <section class="hero-content shell">
+      <div class="hero-text"><p class="eyebrow">Oportunidades inmobiliarias en México</p><h1>Encuentra inmuebles por ubicación y etapa jurídica</h1><p class="hero-copy">Explora propiedades por colonia, municipio o estado. Conoce el tipo de inmueble y su situación jurídica, sin mostrar precios ni domicilios exactos.</p><div class="hero-stat"><strong id="heroTotal">—</strong><span>propiedades disponibles</span></div></div>
+      <div class="hero-visual" aria-hidden="true"><span class="hero-art"></span><div class="hero-light"><span class="hero-orbit orbit-front"></span><span class="hero-orbit orbit-back"></span><span class="travel-light light-one"></span><span class="travel-light light-two"></span></div></div>
+    </section>
+  </header>
+  <section class="catalog shell">
+    <div class="catalog-heading"><div><p class="eyebrow red">Inventario consultable</p><h2>Propiedades disponibles y en seguimiento</h2></div><p class="result-count"><strong id="resultTotal">—</strong> resultados</p></div>
+    <div class="filters">
+      <label class="search-field"><span>Buscar ubicación o clave</span><input id="query" placeholder="Ej. Bugambilias, Zapopan, HS-22547 o folio"></label>
+      <label><span>Estado</span><select id="state"><option>Todos</option></select></label>
+      <label><span>Tipo de inmueble</span><select id="type"><option>Todos</option></select></label>
+      <label><span>Etapa jurídica</span><select id="legal"><option>Todas</option><option>Litigio</option><option>Adjudicada</option><option>Posesión</option><option>Escriturada</option><option>Venta directa</option><option>Otra etapa</option></select></label>
+      <button id="clearFilters" class="clear-button" type="button">Limpiar búsqueda</button>
+    </div>
+    <div id="catalogStatus" class="empty">Cargando catálogo…</div>
+    <div id="propertyGrid" class="property-grid" hidden></div>
+    <nav id="pagination" class="pagination" hidden><button id="previous">← Anterior</button><span id="pageLabel"></span><button id="next">Siguiente →</button></nav>
+  </section>
+  <section class="privacy-note"><div class="shell note-inner"><span class="shield">✓</span><div><h2>Información protegida</h2><p>El catálogo omite precios, calles, números, códigos postales y coordenadas. Para confirmar disponibilidad, solicita información desde el botón de WhatsApp de cada propiedad.</p></div></div></section>
+  <footer class="footer shell"><p>Catálogo informativo.</p><p>Actualización: agosto de 2026</p></footer>
+</main>
+<script src="./properties-data.js" defer></script>
+<script src="./app.js" defer></script>
+</body>
+</html>
