@@ -1,4 +1,4 @@
-const CACHE = "catalogo-inmuebles-v4";
+const CACHE = "catalogo-inmuebles-v6";
 
 const CORE = [
   "./",
@@ -7,6 +7,8 @@ const CORE = [
   "./properties-data.js",
   "./app.js",
   "./properties.json",
+  "./banorte.json",
+  "./banorte-data.js",
   "./favicon.png",
   "./icon-192.png",
   "./icon-512.png",
