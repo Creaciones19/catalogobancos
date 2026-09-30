@@ -3,8 +3,20 @@ let properties=[],filtered=[],page=1;
 const $=id=>document.getElementById(id);
 const normalize=v=>(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const titleCase=v=>(v||"").toLocaleLowerCase("es-MX").replace(/(^|[\s(/-])\p{L}/gu,l=>l.toLocaleUpperCase("es-MX"));
-const publicSource=p=>p.sourceKind==="link"?"Propiedad por link":`Pestaña: ${p.inventory}`;
-const publicCode=p=>p.sourceKind==="link"?`HS-${p.folio}`:p.folio;
+const sourceKey=p=>{
+  const source=normalize(`${p.sourceKind} ${p.inventory} ${p.sourceLabel}`);
+  if(/banorte|\bbn\b/.test(source))return "BN";
+  if(/garzon|\blg\b/.test(source))return "LG";
+  if(/gold/.test(source))return "GOLD";
+  if(/zendere|adjudicados julio|\bzn\b/.test(source))return "ZN";
+  return "";
+};
+const publicSource=p=>sourceKey(p)||(p.sourceKind==="link"?"Propiedad por link":`Pestaña: ${p.inventory}`);
+const publicCode=p=>{
+  const key=sourceKey(p),folio=String(p.folio);
+  if(key)return folio.toUpperCase().startsWith(`${key}-`)?folio:`${key}-${folio}`;
+  return p.sourceKind==="link"?(folio.startsWith("HS-")?folio:`HS-${folio}`):folio;
+};
 const legalCategory=value=>{const v=normalize(value);if(/escritura|escrituracion|inscripcion|notaria|formaliz/.test(v))return"Escriturada";if(/posesion/.test(v))return"Posesión";if(/adjudic/.test(v))return"Adjudicada";if(/litig|demanda|emplaz|sentencia|remate|juicio|ejecucion|mora/.test(v))return"Litigio";if(/venta normal|compra venta/.test(v))return"Venta directa";return"Otra etapa"};
 const iconFor=type=>{const v=normalize(type);return v.includes("terreno")?"◇":v.includes("departamento")?"▦":v.includes("local")||v.includes("comercial")?"▤":v.includes("oficina")?"▥":"⌂"};
 const whatsapp=p=>{const msg=`Hola, solicito información de esta propiedad.\nClave/Folio: ${publicCode(p)}\nColonia: ${p.colony}\nMunicipio: ${p.municipality}\nEstado: ${p.state}\nOrigen: ${publicSource(p)}`;return`https://wa.me/523343340062?text=${encodeURIComponent(msg)}`};
@@ -25,4 +37,4 @@ $("query").addEventListener("input",()=>{$("state").value="Todos";$("type").valu
 
 $("clearFilters").addEventListener("click",()=>{$("query").value="";$("state").value="Todos";$("type").value="Todos";$("legal").value="Todas";applyFilters();$("query").focus()});
 
-if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js?v=5").catch(()=>{});start();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js?v=7").catch(()=>{});start();
