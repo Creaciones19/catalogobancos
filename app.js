@@ -9,6 +9,7 @@ const sourceKey=p=>{
   if(/garzon|\blg\b/.test(source))return "LG";
   if(/gold/.test(source))return "GOLD";
   if(/zendere|adjudicados julio|\bzn\b/.test(source))return "ZN";
+  if(p.inventory==="RE")return "RE";
   return "";
 };
 const publicSource=p=>sourceKey(p)||(p.sourceKind==="link"?"Propiedad por link":`Pestaña: ${p.inventory}`);
@@ -27,7 +28,7 @@ function fillTypeSelect(values){$("type").innerHTML+=values.map(([key,label])=>`
 
 const compareProperties=(a,b)=>{if(!a.state&&b.state)return 1;if(a.state&&!b.state)return-1;return a.state.localeCompare(b.state,"es",{sensitivity:"base"})||a.municipality.localeCompare(b.municipality,"es",{sensitivity:"base"})||a.colony.localeCompare(b.colony,"es",{sensitivity:"base"})||publicCode(a).localeCompare(publicCode(b),"es",{numeric:true,sensitivity:"base"})};
 
-function applyFilters(){const q=normalize($("query").value.trim()),state=$("state").value,type=$("type").value,legal=$("legal").value;filtered=properties.filter(p=>(!q||p._search.includes(q))&&(state==="Todos"||p.state===state)&&(type==="Todos"||p._type===type)&&(legal==="Todas"||p._legal===legal));page=1;render(false)}
+function applyFilters(){const q=normalize($("query").value.trim()),state=$("state").value,type=$("type").value,legal=$("legal").value;filtered=properties.filter(p=>(!q||(q==="re"?p.inventory==="RE":p._search.includes(q)))&&(state==="Todos"||p.state===state)&&(type==="Todos"||p._type===type)&&(legal==="Todas"||p._legal===legal));page=1;render(false)}
 
 function render(scrollToCatalog=false){const pages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE)),visible=filtered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);$("resultTotal").textContent=filtered.length.toLocaleString("es-MX");$("catalogStatus").hidden=visible.length>0;$("propertyGrid").hidden=!visible.length;$("catalogStatus").innerHTML=visible.length?"":`<strong>No encontramos inmuebles con esos datos.</strong>`;$("propertyGrid").innerHTML=visible.map(p=>`<article class="property-card"><div class="card-top"><span class="property-icon">${iconFor(p.type)}</span><div><span class="folio">${p.sourceKind==="link"?"Clave":"Folio"} ${escapeHtml(publicCode(p))}</span><h3>${escapeHtml(titleCase(p.type))}</h3></div></div><div class="location"><span class="pin">●</span><div><p class="colony">${escapeHtml(titleCase(p.colony))}</p><p>${escapeHtml(titleCase(p.municipality))}${p.state?`, ${escapeHtml(titleCase(p.state))}`:""}</p></div></div><div class="legal"><span>${escapeHtml(legalCategory(p.legalStage))}</span><p>${escapeHtml(p.legalStage)}</p></div><a class="whatsapp" href="${whatsapp(p)}" target="_blank" rel="noreferrer">Solicitar información por WhatsApp</a><div class="card-footer"><span>${escapeHtml(publicSource(p))}</span><span class="${p.availability==="No disponible"?"status muted":"status"}">${escapeHtml(p.availability)}</span></div></article>`).join("");$("pagination").hidden=filtered.length<=PAGE_SIZE;$("pageLabel").textContent=`Página ${page} de ${pages}`;$("previous").disabled=page===1;$("next").disabled=page===pages;if(scrollToCatalog)window.scrollTo({top:document.querySelector(".catalog").offsetTop-20,behavior:"smooth"})}
 
