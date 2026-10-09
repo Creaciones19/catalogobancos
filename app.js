@@ -9,6 +9,7 @@ const sourceKey=p=>{
   if(/garzon|\blg\b/.test(source))return "LG";
   if(/gold/.test(source))return "GOLD";
   if(/zendere|adjudicados julio|\bzn\b/.test(source))return "ZN";
+  if(/adamantine|\badm\b/.test(source))return "ADM";
   if(p.inventory==="RE")return "RE";
   return "";
 };
